@@ -1,19 +1,20 @@
 package abnamro.recipes.service;
 
+import abnamro.recipes.domain.Recipe;
 import abnamro.recipes.repository.RecipeRepository;
 import abnamro.recipes.repository.search.RecipeSearchRepository;
-import abnamro.recipes.domain.Recipe;
-import abnamro.recipes.service.dto.RecipeDTO;
+import abnamro.recipes.service.api.dto.RecipeDTO;
 import abnamro.recipes.service.mapper.RecipeMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service Implementation for managing {@link Recipe}.
@@ -61,7 +62,7 @@ public class RecipeService {
         log.debug("Request to partially update Recipe : {}", recipeDTO);
 
         return recipeRepository
-            .findById(recipeDTO.getId())
+            .findById(recipeDTO.getId().longValue())
             .map(existingRecipe -> {
                 recipeMapper.partialUpdate(existingRecipe, recipeDTO);
 
@@ -117,11 +118,11 @@ public class RecipeService {
      * @return the list of entities.
      */
     @Transactional(readOnly = true)
-    public List<RecipeDTO> search(String query) {
+    public Optional<List<RecipeDTO>> search(String query) {
         log.debug("Request to search Recipes for query {}", query);
-        return StreamSupport
+        return Optional.of(StreamSupport
             .stream(recipeSearchRepository.search(query).spliterator(), false)
             .map(recipeMapper::toDto)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
     }
 }

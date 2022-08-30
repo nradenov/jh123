@@ -15,7 +15,7 @@ info:
 servers:
   - url: http://localhost/api
 paths:
-  /query:
+  /_search/recipes:
     get:
       summary: elastic search query for recipes
       operationId: searchRecipes
@@ -35,14 +35,127 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Recipe'
+                  $ref: '#/components/schemas/RecipeDTO'
+  /recipes:
+    get:
+      summary: database query for recipes
+      operationId: getAllRecipes
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeDTO'
+    post:
+      summary: database query to add new recipe
+      operationId: createRecipe
+      requestBody:
+        description: recipe to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+        '400':
+          description: Bad request - id exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+
+  /recipes/{id}:
+    get:
+      summary: database query for single recipe per recipe id, or empty body if nothing found
+      operationId: getRecipe
+      parameters:
+        - name: id
+          in: path
+          description: Recipe ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+    delete:
+      summary: database query to delete recipe per recipe id, or empty body if nothing found
+      operationId: deleteRecipe
+      parameters:
+        - name: id
+          in: path
+          description: Recipe ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+    put:
+      summary: database query to update existing recipe
+      operationId: updateRecipe
+      parameters:
+        - name: id
+          in: path
+          description: Recipe ID
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: recipe to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecipeDTO'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDTO'
+        '400':
+          description: Bad request - not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
 components:
   schemas:
-    Recipe:
+    BadRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        entityType:
+          type: string
+        code:
+          type: string
+    RecipeDTO:
       type: object
       properties:
         id:
-          type: string
+          type: number
         title:
           type: string
         ingredients:

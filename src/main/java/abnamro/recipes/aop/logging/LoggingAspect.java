@@ -15,7 +15,6 @@ import java.util.Arrays;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
- *
  * By default, it only runs with the "dev" profile.
  */
 @Aspect
@@ -43,9 +42,9 @@ public class LoggingAspect {
      * Pointcut that matches all Spring beans in the application's main packages.
      */
     @Pointcut(
-        "within(com.mycompany.myapp.repository..*)" +
-        " || within(com.mycompany.myapp.service..*)" +
-        " || within(com.mycompany.myapp.web.rest..*)"
+        "within(abnamro.recipes.repository..*)" +
+        " || within(abnamro.recipes.service..*)" +
+        " || within(abnamro.recipes.web.rest..*)"
     )
     public void applicationPackagePointcut() {
         // Method is empty as this is just a Pointcut, the implementations are in the advices.

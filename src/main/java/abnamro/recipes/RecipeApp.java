@@ -1,5 +1,6 @@
 package abnamro.recipes;
 
+
 import abnamro.recipes.config.ApplicationProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,13 +17,13 @@ import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
-public class Jh123App {
+public class RecipeApp {
 
-    private static final Logger log = LoggerFactory.getLogger(Jh123App.class);
+    private static final Logger log = LoggerFactory.getLogger(RecipeApp.class);
 
     private final Environment env;
 
-    public Jh123App(Environment env) {
+    public RecipeApp(Environment env) {
         this.env = env;
     }
 
@@ -32,7 +33,7 @@ public class Jh123App {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(Jh123App.class);
+        SpringApplication app = new SpringApplication(RecipeApp.class);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
     }

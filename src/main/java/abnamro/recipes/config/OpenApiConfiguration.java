@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 @Profile("api-docs")
 public class OpenApiConfiguration {
 
-    public static final String API_FIRST_PACKAGE = "com.mycompany.myapp.web.api";
+    public static final String API_FIRST_PACKAGE = "abnamro.recipes.web.api";
 
     @Bean
     @ConditionalOnMissingBean(name = "apiFirstGroupedOpenAPI")
