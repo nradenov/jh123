@@ -1,0 +1,44 @@
+version: '2'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.1
+    restart: always
+    container_name: stubbornjava_elasticsearch
+    environment:
+      - node.name=stubbornjava
+      - cluster.name=stubbornjava-cluster
+      - http.port=9200
+      - transport.tcp.port=9300
+      - discovery.zen.minimum_master_nodes=1
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - node.data=true
+      - node.master=true
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - stubbornjava_esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+  mysql:
+    build: mysql
+    restart: always
+    container_name: stubbornjava_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "3396:3306"
+    volumes:
+      - stubbornjava_mysql:/var/lib/mysql
+
+volumes:
+  stubbornjava_esdata:
+    driver: local
+  stubbornjava_mysql:
+    driver: local

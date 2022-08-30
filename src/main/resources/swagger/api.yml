@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: Recipe Store - OpenAPI 3.0
+  description: |-
+    This is sample recipe store that allows you to store, update and query reipes.
+    Recipe is defined as data contained holding title, ingredients list as space
+    separated list, catraories, also as space sepaated list, number of servings supported and instructions for preparation.
+    Recipe query is ieither by recipe ID, or using elastic search query, foe example:
+    (category:((vegan OR meat) AND NOT desert) AND (ingredients:(flower AND NOT milk)) and (servings:5)
+    should return recipe(s), if such exist, that are matching specified logical conditions in recipe fields.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: http://localhost/api
+paths:
+  /query:
+    get:
+      summary: elastic search query for recipes
+      operationId: searchRecipes
+      parameters:
+        - name: query
+          in: query
+          description: Recipe query as per ES specification
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+components:
+  schemas:
+    Recipe:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        ingredients:
+          type: string
+          example: "100 grams of butter, pinch of salt"
+        instructions:
+          type: string
+          example: "melt down butter on low fire and add salt"
+        category:
+          type: string
+          example: "dairy, cholesterol"
+
+
